@@ -16,9 +16,10 @@ services:
               capabilities: [gpu]
     environment:
       - CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-0}
+      - OLLAMA_SCHED_SPREAD=1
 
   open-webui:
-    image: ghcr.io/open-webui/open-webui:main
+    image: ghcr.io/open-webui/open-webui:latest
     container_name: open-webui
     ports:
       - "${WEBUI_PORT:-8080}:8080"
