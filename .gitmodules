@@ -1,0 +1,6 @@
+[submodule "mcp-server"]
+	path = mcp-server
+	url = https://github.com/modelcontextprotocol/servers.git
+[submodule "openapi-servers"]
+	path = openapi-servers
+	url = https://github.com/open-webui/openapi-servers.git

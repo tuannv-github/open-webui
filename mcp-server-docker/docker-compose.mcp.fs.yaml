@@ -1,0 +1,18 @@
+services:
+  mcp-filesystem:
+    image: mcp/filesystem
+    build:
+      context: ../mcp-server
+      dockerfile: src/filesystem/Dockerfile
+    container_name: mcp-filesystem-server
+    restart: unless-stopped
+    stdin_open: true  # Equivalent to -i flag for interactive mode
+    tty: true         # Allocate a TTY
+    environment:
+      - NODE_ENV=production
+      - MCP_LOG_LEVEL=info
+    volumes:
+      - ../:/project:ro
+    # Expose port for MCP server (optional)
+    ports:
+      - "3000:3000"
