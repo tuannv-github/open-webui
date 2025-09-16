@@ -17,6 +17,32 @@ services:
     environment:
       - OLLAMA_SCHED_SPREAD=1
 
+  # vllm:
+  #   image: vllm/vllm-openai:latest
+  #   container_name: vllm
+  #   runtime: nvidia
+  #   deploy:
+  #     resources:
+  #       reservations:
+  #         devices:
+  #           - capabilities: [gpu]
+  #   ports:
+  #     - "8000:8000"
+  #   volumes:
+  #     - ~/.cache/huggingface:/root/.cache/huggingface
+  #   environment:
+  #     - VLLM_ALLOW_LONG_MAX_MODEL_LEN=1
+  #   command:
+  #     [
+  #       "--model", "Qwen/Qwen3-8B",
+  #       "--host", "0.0.0.0",
+  #       "--port", "8000",
+  #       "--gpu-memory-utilization", "0.9",
+  #       "--tensor-parallel-size", "2",
+  #       "--max-model-len", "40960"
+  #     ]
+  #   ipc: host
+
   open-webui:
     image: ghcr.io/open-webui/open-webui:latest
     container_name: open-webui
@@ -26,8 +52,11 @@ services:
       - ./open-webui:/app/backend/data
     environment:
       - WEBUI_LOG_LEVEL=info
+      - OPENAI_API_BASE_URL=http://vllm:8000/v1
+      - OPENAI_API_KEY=EMPTY
+      - ENABLE_OPENAI_API=true
+      - DEFAULT_MODELS=Qwen/Qwen3-8B
+      - OPENAI_API_CONFIGS=[{"name":"vLLM","base_url":"http://vllm:8000/v1","api_key":"EMPTY","models":["Qwen/Qwen3-8B"]}]
     extra_hosts:
       - "host.docker.internal:host-gateway"
-    depends_on:
-      - ollama
     restart: unless-stopped
